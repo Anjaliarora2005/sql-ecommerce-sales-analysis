@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?><sqlb_project><db path="new database.db" readonly="0" foreign_keys="1" case_sensitive_like="0" temp_store="0" wal_autocheckpoint="1000" synchronous="2"/><attached/><window><main_tabs open="structure browser pragmas query" current="3"/></window><tab_structure><column_width id="0" width="300"/><column_width id="1" width="0"/><column_width id="2" width="100"/><column_width id="3" width="839"/><column_width id="4" width="0"/><expanded_item id="0" parent="1"/><expanded_item id="1" parent="1"/><expanded_item id="2" parent="1"/><expanded_item id="3" parent="1"/></tab_structure><tab_browse><table title="Customers" custom_title="0" dock_id="1" table="4,9:mainCustomers"/><dock_state state="000000ff00000000fd000000010000000200000435000002a8fc0100000001fb000000160064006f0063006b00420072006f00770073006500310100000000000004350000014d00ffffff000004350000000000000004000000040000000800000008fc00000000"/><default_encoding codec=""/><browse_table_settings><table schema="main" name="Customers" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="99"/><column index="2" value="123"/><column index="3" value="63"/><column index="4" value="78"/><column index="5" value="109"/><column index="6" value="98"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Order_Details" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort><column index="3" mode="0"/></sort><column_widths><column index="1" value="73"/><column index="2" value="88"/><column index="3" value="72"/><column index="4" value="73"/><column index="5" value="109"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Orders" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="55"/><column index="2" value="77"/><column index="3" value="85"/><column index="4" value="79"/><column index="5" value="106"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="Returns" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="60"/><column index="2" value="55"/><column index="3" value="85"/><column index="4" value="109"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table><table schema="main" name="products" show_row_id="0" encoding="" plot_x_axis="" unlock_view_pk="_rowid_" freeze_columns="0"><sort/><column_widths><column index="1" value="69"/><column index="2" value="93"/><column index="3" value="117"/><column index="4" value="83"/><column index="5" value="70"/></column_widths><filter_values/><conditional_formats/><row_id_formats/><display_formats/><hidden_columns/><plot_y_axes/><global_filter/></table></browse_table_settings></tab_browse><tab_sql><sql name="SQL 1">-- Display all records from the Customers table.
+
+SELECT *
+FROM Customers;
+</sql><sql name="SQL 2">--Display only customer_name, city, and state.
+
+SELECT customer_name , city , state 
+FROM Customers;</sql><sql name="SQL 3">-- Find all unique cities.
+
+SELECT DISTINCT city
+FROM Customers;
+</sql><sql name="SQL 4">--Calculate the total number of customers.
+
+SELECT COUNT(*) AS total_customer
+from Customers;</sql><sql name="SQL 5">--Find the total number of Male and Female customers.
+SELECT GENDER, COUNT (*)total_customers
+from Customers
+GROUP BY gender;</sql><sql name="SQL 6">--Find all customers from Delhi.
+
+select customer_name
+from Customers
+WHERE city = 'Delhi' ;</sql><sql name="SQL 7">--Find customers who signed up after 2024.
+
+SELECT *
+FROM Customers
+WHERE signup_date &gt;= '2025-01-01';</sql><sql name="SQL 8">--Sort products from the highest price to the lowest price.
+
+SELECT * 
+FROM products
+ORDER BY price DESC ;</sql><sql name="SQL 9">--Find the top 10 most expensive products.
+
+SELECT * 
+FROM products
+ORDER BY price DESC
+LIMIT 10;
+
+</sql><sql name="SQL 10">--Find the total number of products in each category.
+
+SELECT count(*) AS category
+FROM products;</sql><sql name="SQL 11">--Calculate the total number of orders.
+SELECT COUNT (*) AS total_orders
+FROM Orders;</sql><sql name="SQL 12">--Find the number of orders for each order_status.
+SELECT order_status , count(*) as total_orders
+FROM Orders 
+GROUP BY order_status; 
+</sql><sql name="SQL 13">--Calculate the number of orders for each payment_method.
+
+SELECT payment_method , COUNT(*) AS total_orders
+from Orders
+group by payment_method; 
+</sql><sql name="SQL 14">--Calculate the average order value.
+
+SELECT avg (sales_amount) AS avg_order_value
+from Order_Details;</sql><sql name="SQL 15">--Calculate total sales revenue.
+
+SELECT sum (sales_amount) AS total_sales_revenue
+from Order_Details;</sql><sql name="SQL 16">--Calculate month-wise total sales.
+
+SELECT 
+    strftime('%Y-%m', order_date) AS month,
+    SUM(sales_amount) AS total_sales
+FROM Orders
+JOIN Order_Details
+USING (order_id)
+GROUP BY month;</sql><sql name="SQL 17">-- Calculate year-wise total sales.
+
+
+SELECT 
+    strftime('%Y', order_date) AS year,
+    SUM(sales_amount) AS total_sales
+FROM Orders
+JOIN Order_Details
+USING (order_id)
+GROUP BY year
+ORDER BY year;</sql><sql name="SQL 18">-- Find the top 10 highest-value orders.
+
+SELECT order_id , sales_amount
+from Order_Details 
+ORDER BY sales_amount DESC
+LIMIT 10 ;</sql><sql name="SQL 19">--Find the total number of orders placed by each customer.
+
+SELECT customer_id, COUNT(order_id) AS total_orders
+FROM Orders
+GROUP BY customer_id;
+</sql><sql name="SQL 20"> -- Find customers who have placed more than 5 orders.
+ 
+ SELECT customer_id , count (order_id) as total_orders
+ FROM Orders 
+ GROUP BY customer_id
+HAVING COUNT (order_id) &gt; 5; 
+</sql><sql name="SQL 21">--Display customer names along with their order details.
+
+SELECT customer_name, Orders.*
+FROM Customers
+JOIN Orders
+ON Customers.customer_id = Orders.customer_id;</sql><sql name="SQL 22">--Display Order ID, Customer Name, Order Date, and Order Status.
+
+
+SELECT
+    o.order_id,
+    c.customer_name,
+    o.order_date,
+    o.order_status
+FROM Orders o
+JOIN Customers c
+ON o.customer_id = c.customer_id;
+	  
+	  
+</sql><sql name="SQL 23">-- Display Product Name along with Sales Amount.
+
+SELECT
+    p.product_name,
+    od.sales_amount
+FROM Products p
+JOIN Order_Details od
+ON p.product_id = od.product_id;</sql><sql name="SQL 24">--Display Customer Name, Product Name, Quantity, and Sales Amount in one result.
+ 
+
+SELECT
+    c.customer_name,
+    p.product_name,
+    od.quantity,
+    od.sales_amount
+FROM Customers c
+JOIN Orders o
+ON c.customer_id = o.customer_id
+JOIN Order_Details od
+ON o.order_id = od.order_id
+JOIN Products p
+ON od.product_id = p.product_id;
+</sql><sql name="SQL 25">--Calculate the total spending of each customer.
+
+SELECT
+    c.customer_name,
+    SUM(od.sales_amount) AS total_spending
+FROM Customers c
+JOIN Orders o
+ON c.customer_id = o.customer_id
+JOIN Order_Details od
+ON o.order_id = od.order_id
+GROUP BY c.customer_name;</sql><sql name="SQL 26">-- Find the top 10 highest-spending customers.
+SELECT
+    c.customer_name,
+    SUM(od.sales_amount) AS total_spending
+FROM Customers c
+JOIN Orders o
+ON c.customer_id = o.customer_id
+JOIN Order_Details od
+ON o.order_id = od.order_id
+GROUP BY c.customer_name
+ORDER BY total_spending DESC
+LIMIT 10;
+	</sql><sql name="SQL 27">--Calculate total sales for each product.
+
+
+	  SELECT
+    p.product_name,
+    SUM(od.sales_amount) AS total_sales
+FROM Products p
+JOIN Order_Details od
+ON p.product_id = od.product_id
+GROUP BY p.product_name;
+</sql><sql name="SQL 28">--Find the top 10 best-selling products.
+
+SELECT
+    p.product_name,
+    SUM(od.sales_amount) AS total_sales
+FROM Products p
+JOIN Order_Details od
+ON p.product_id = od.product_id
+GROUP BY p.product_name
+ORDER BY total_sales DESC
+LIMIT 10;
+
+ 
+
+</sql><sql name="SQL 29">--Calculate category-wise total revenue.
+
+SELECT
+    p.category,
+    SUM(od.sales_amount) AS total_revenue
+FROM Products p
+JOIN Order_Details od
+ON p.product_id = od.product_id
+GROUP BY p.category;
+</sql><sql name="SQL 30">--Find customers who have never placed an order.
+SELECT
+    c.customer_id,
+    c.customer_name
+FROM Customers c
+LEFT JOIN Orders o
+ON c.customer_id = o.customer_id
+WHERE o.order_id IS NULL;</sql><current_tab id="29"/></tab_sql></sqlb_project>
